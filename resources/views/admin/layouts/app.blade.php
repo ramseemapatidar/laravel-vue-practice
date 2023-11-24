@@ -11,7 +11,7 @@
 </head>
 
 <body class="hold-transition sidebar-mini">
-    <div class="wrapper">
+    <div class="wrapper" id="app">
 
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
 
@@ -180,45 +180,45 @@
 
 
                         <li class="nav-item">
-                            <a href="/admin/dashboard" class="nav-link">
+                            <router-link to="/admin/dashboard" active-class="active" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
-                            </a>
+                            </router-link>
                         </li>
 
                         <li class="nav-item">
-                            <a href="/admin/appointments" class="nav-link">
+                            <router-link to="/admin/appointments" active-class="active" class="nav-link">
                                 <i class="nav-icon fas fa-calendar-alt"></i>
                                 <p>Appointments</p>
-                            </a>
+                            </router-link>
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <router-link to="/admin/users" active-class="active" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>Users</p>
-                            </a>
+                            </router-link>
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <router-link to="/admin/settings" active-class="active" class="nav-link">
                                 <i class="nav-icon fas fa-cog"></i>
                                 <p>Settings</p>
-                            </a>
+                            </router-link>
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <router-link to="/admin/profile" active-class="active" class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>Profile</p>
-                            </a>
+                            </router-link>
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <router-link to="/admin/loguout" active-class="active" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>Logout</p>
-                            </a>
+                            </router-link>
                         </li>
                     </ul>
                 </nav>
@@ -228,83 +228,8 @@
         </aside>
 
         <div class="content-wrapper">
+            <router-view></router-view>
 
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Starter Page</h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Starter Page</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's
-                                        content.
-                                    </p>
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
-                                </div>
-                            </div>
-                            <div class="card card-primary card-outline">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's
-                                        content.
-                                    </p>
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="m-0">Featured</h5>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Special title treatment</h6>
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional
-                                        content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-                            <div class="card card-primary card-outline">
-                                <div class="card-header">
-                                    <h5 class="m-0">Featured</h5>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Special title treatment</h6>
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional
-                                        content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
 
         </div>
 
