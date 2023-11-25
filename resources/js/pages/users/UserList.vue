@@ -1,8 +1,16 @@
 <script setup>
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref,  onMounted, reactive } from 'vue';
 
 const users = ref([]);
+
+const formData = reactive({
+    name:'',
+    email: '',
+    password:'',
+});
+
+
 
 const getUsers = () => {
 
@@ -10,6 +18,20 @@ const getUsers = () => {
     .then((response) => {
         users.value = response.data;
     })
+}
+
+const createUser = () =>{
+    axios.post('/api/users', formData)
+    .then((response)=> {
+        //users.value.push(response.data); // data push in last
+        users.value.unshift(response.data); // data push in first
+        formData.name = '';
+        formData.email = '';
+        formData.password = '';
+        $('#createUserModal').hide('modal');
+        $('.modal-backdrop').remove();
+    })
+
 }
 
 onMounted(() => {
@@ -79,18 +101,18 @@ onMounted(() => {
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form ref="form">
+                <form autocomplete="off">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input name="name" type="text" class="form-control"
+                            <input name="name" v-model="formData.name" type="text" class="form-control"
                                 id="name" aria-describedby="nameHelp" placeholder="Enter full name" />
                             <span class="invalid-feedback"></span>
                         </div>
 
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input name="email" type="email" class="form-control "
+                            <input name="email" v-model="formData.email" type="email" class="form-control "
                                  id="email" aria-describedby="nameHelp"
                                 placeholder="Enter full name" />
                             <span class="invalid-feedback"></span>
@@ -98,7 +120,7 @@ onMounted(() => {
 
                         <div class="form-group">
                             <label for="email">Password</label>
-                            <input name="password" type="password" class="form-control "
+                            <input name="password" v-model="formData.password" type="password" class="form-control "
                                  id="password" aria-describedby="nameHelp"
                                 placeholder="Enter password" />
                             <span class="invalid-feedback"></span>
@@ -106,7 +128,7 @@ onMounted(() => {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" @click="createUser" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
