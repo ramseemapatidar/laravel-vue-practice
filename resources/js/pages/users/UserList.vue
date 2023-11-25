@@ -19,13 +19,18 @@ const schema = yup.object({
     password: yup.string().required().min(3),
 })
 
-const createUser = (values ,{ resetForm }) =>{
+const createUser = (values ,{ resetForm, setErrors }) =>{
    axios.post('/api/users',values)
    .then((response) => {
         users.value.unshift(response.data);
         $('#createUserModal').modal('hide');
         resetForm();
    })
+   .catch((error) => {
+        if (error.response.data.errors) {
+            setErrors(error.response.data.errors);
+        }
+    })
 }
 
 
