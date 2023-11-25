@@ -1,16 +1,10 @@
 <script setup>
 import axios from 'axios';
 import { ref,  onMounted, reactive } from 'vue';
+import { Form, Field } from 'vee-validate';
+import * as yup from 'yup';
 
 const users = ref([]);
-
-const formData = reactive({
-    name:'',
-    email: '',
-    password:'',
-});
-
-
 
 const getUsers = () => {
 
@@ -19,20 +13,21 @@ const getUsers = () => {
         users.value = response.data;
     })
 }
+const schema = yup.object({
+    name: yup.string().required(),
+    email: yup.string().email().required(),
+    password: yup.string().required().min(3),
+})
 
-const createUser = () =>{
-    axios.post('/api/users', formData)
-    .then((response)=> {
-        //users.value.push(response.data); // data push in last
-        users.value.unshift(response.data); // data push in first
-        formData.name = '';
-        formData.email = '';
-        formData.password = '';
-        $('#createUserModal').hide('modal');
-        $('.modal-backdrop').remove();
-    })
-
+const createUser = (values ,{ resetForm }) =>{
+   axios.post('/api/users',values)
+   .then((response) => {
+        users.value.unshift(response.data);
+        $('#createUserModal').modal('hide');
+        resetForm();
+   })
 }
+
 
 onMounted(() => {
     getUsers()
@@ -101,36 +96,34 @@ onMounted(() => {
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form autocomplete="off">
+                <Form @submit="createUser" :validation-schema="schema" v-slot="{errors}">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input name="name" v-model="formData.name" type="text" class="form-control"
+                            <Field name="name" type="text" class="form-control" :class="{ 'is-invalid': errors.name }"
                                 id="name" aria-describedby="nameHelp" placeholder="Enter full name" />
-                            <span class="invalid-feedback"></span>
+                            <span class="invalid-feedback">{{ errors.name }}</span>
                         </div>
 
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input name="email" v-model="formData.email" type="email" class="form-control "
-                                 id="email" aria-describedby="nameHelp"
+                            <Field name="email" type="email" class="form-control " :class="{ 'is-invalid': errors.email }" id="email" aria-describedby="nameHelp"
                                 placeholder="Enter full name" />
-                            <span class="invalid-feedback"></span>
+                            <span class="invalid-feedback">{{ errors.email }}</span>
                         </div>
 
                         <div class="form-group">
                             <label for="email">Password</label>
-                            <input name="password" v-model="formData.password" type="password" class="form-control "
-                                 id="password" aria-describedby="nameHelp"
+                            <Field name="password" type="password" class="form-control " :class="{ 'is-invalid': errors.password }" id="password" aria-describedby="nameHelp"
                                 placeholder="Enter password" />
-                            <span class="invalid-feedback"></span>
+                            <span class="invalid-feedback">{{ errors.password }}</span>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" @click="createUser" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
-                </form>
+                </Form>
             </div>
         </div>
     </div>
