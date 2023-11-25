@@ -80,13 +80,21 @@ const updateUser = (values, { setErrors }) => {
 }
 
 const handleSubmit = (values, actions) => {
-    // console.log(actions);
     if (editing.value) {
         updateUser(values, actions);
     } else {
         createUser(values, actions);
     }
 }
+
+const confirmationModal = (user) =>{
+    $('#deleteUserModal').modal('show');
+}
+
+const deleteUser = () => {
+
+}
+
 onMounted(() => {
     getUsers()
 
@@ -135,6 +143,7 @@ onMounted(() => {
                                 <td>-</td>
                                 <td>
                                     <a href="#" @click.prevent="editUser(user)"><i class="fa fa-edit"></i></a>
+                                    <a href="#" @click.prevent="confirmationModal(user)"><i class="fa fa-trash text-danger ml-2"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -190,4 +199,29 @@ onMounted(() => {
         </div>
     </div>
     <!-- End user Modal -->
+
+    <!-- Start confirmation Modal -->
+    <div class="modal fade" id="deleteUserModal" data-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">
+                        <span>Delete User</span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Are you sure you want to delete this user ?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button @click.prevent="deleteUser" type="button" class="btn btn-primary">Delete User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End confirmation Modal -->
 </template>
