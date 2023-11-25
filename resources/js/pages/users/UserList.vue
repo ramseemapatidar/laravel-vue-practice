@@ -5,6 +5,9 @@ import { Form, Field } from 'vee-validate';
 import * as yup from 'yup';
 
 const users = ref([]);
+const editing = ref(false);
+const formValues = ref();
+const form = ref(null);
 
 const getUsers = () => {
 
@@ -19,11 +22,20 @@ const schema = yup.object({
     password: yup.string().required().min(3),
 })
 
+const editschema = yup.object({
+    name: yup.string().required(),
+    email: yup.string().email().required(),
+    password: yup.string().when((password, schema) => {
+        return password ? schema.required().min(3) : schema;
+    }),
+
+})
+
 const createUser = (values ,{ resetForm, setErrors }) =>{
    axios.post('/api/users',values)
    .then((response) => {
         users.value.unshift(response.data);
-        $('#createUserModal').modal('hide');
+        $('#userFormModal').modal('hide');
         resetForm();
    })
    .catch((error) => {
@@ -32,8 +44,45 @@ const createUser = (values ,{ resetForm, setErrors }) =>{
         }
     })
 }
+const addUserModal = () =>{
+    editing.value = false;
+    $('#userFormModal').modal('show');
+}
+const editUser = (user)=>{
 
+    editing.value = true;
+    form.value.resetForm();
+    $('#userFormModal').modal('show');
+    formValues.value = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+    };
+}
 
+const updateUser = (values, { setErrors }) => {
+
+    axios.put('/api/users/' + formValues.value.id, values)
+        .then((response) => {
+            const index = users.value.findIndex(user => user.id === response.data.id);
+            users.value[index] = response.data;
+            $('#userFormModal').modal('hide');
+
+        }).catch((error) => {
+
+            setErrors(error.response.data.errors);
+
+        });
+}
+
+const handleSubmit = (values, actions) => {
+    // console.log(actions);
+    if (editing.value) {
+        updateUser(values, actions);
+    } else {
+        createUser(values, actions);
+    }
+}
 onMounted(() => {
     getUsers()
 });
@@ -58,7 +107,7 @@ onMounted(() => {
 
     <div class="content">
         <div class="container-fluid">
-            <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#createUserModal">Add New User</button>
+            <button type="button" class="btn btn-primary mb-2" @click="addUserModal">Add New User</button>
             <div class="card">
                 <div class="card-body">
                     <table class="table">
@@ -79,7 +128,9 @@ onMounted(() => {
                                 <td>{{ user.email }}</td>
                                 <td>-</td>
                                 <td>-</td>
-                                <td>-</td>
+                                <td>
+                                    <a href="#" @click.prevent="editUser(user)"><i class="fa fa-edit"></i></a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -89,19 +140,20 @@ onMounted(() => {
     </div>
 
     <!-- Add user Modal -->
-    <div class="modal fade" id="createUserModal" data-backdrop="static" tabindex="-1" role="dialog"
+    <div class="modal fade" id="userFormModal" data-backdrop="static" tabindex="-1" role="dialog"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">
-                        <span>Add New User</span>
+                        <span v-if="editing">Edit User</span>
+                        <span v-else>Add New User</span>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <Form @submit="createUser" :validation-schema="schema" v-slot="{errors}">
+                <Form ref="form" @submit="handleSubmit" :validation-schema="editing ? schema : editschema" v-slot="{errors}" :initial-values="formValues">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="name">Name</label>
@@ -126,7 +178,7 @@ onMounted(() => {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">{{ editing ? 'Update' : 'Save' }}</button>
                     </div>
                 </Form>
             </div>
