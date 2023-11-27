@@ -5,7 +5,7 @@ import { formatDate } from '../../helper.js';
 import { useToastr } from '../../toastr.js';
 
 const userIdBeingDeleted = ref(null);
-const emit = defineEmits(['userDeleted'])
+const emit = defineEmits(['userDeleted','editUser'])
 const toastr = useToastr();
  defineProps({
     user: Object,
@@ -27,6 +27,10 @@ const deleteUser = () => {
         emit('userDeleted',userIdBeingDeleted.value);
     });
 };
+
+const editUser = (user) =>{
+    emit('editUser',user);
+}
 </script>
 <template>
     <tr >

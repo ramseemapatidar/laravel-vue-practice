@@ -132,7 +132,7 @@ onMounted(() => {
                             </tr>
                         </thead>
                         <tbody>
-                            <UserListItem  v-for="(user,index) in users" :key="user.id" :user="user" :index="index" @user-deleted="userDeleted"></UserListItem>
+                            <UserListItem  v-for="(user,index) in users" :key="user.id" :user="user" :index="index" @user-deleted="userDeleted" @edit-user="editUser"></UserListItem>
                         </tbody>
                     </table>
                 </div>
