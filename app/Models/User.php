@@ -12,6 +12,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const ROLLTYPE = [
+        '1' => 'Admin',
+        '2' => 'User'
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -50,5 +54,16 @@ class User extends Authenticatable
     public function getFormattedCreatedAtAttribute()
     {
         return $this->created_at->format(config('constants.date_format'));
+    }
+
+    public function getRoleAttribute($key)
+    {
+        // Check if the attribute exists in the constants array (chat gpt)
+        if (array_key_exists($key, self::ROLLTYPE)) {
+            return self::ROLLTYPE[$key];
+        }
+
+        // If no constant found, use the default behavior
+        return parent::getAttribute($key);
     }
 }
