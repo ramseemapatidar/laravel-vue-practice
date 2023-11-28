@@ -6,15 +6,18 @@ import * as yup from 'yup';
 import { useToastr } from '../../toastr.js';
 import UserListItem from './UserListItem.vue';
 import { debounce } from 'lodash';
-const users = ref([]);
+import { Bootstrap4Pagination } from 'laravel-vue-pagination';
+
+const users = ref({'data': []});
 const editing = ref(false);
 const formValues = ref();
 const form = ref(null);
 const toastr = useToastr();
 const searchQuery = ref(null);
-const getUsers = () => {
 
-    axios.get('/api/users')
+const getUsers = (page = 1) => {
+
+    axios.get(`/api/users?page=${page}`)
     .then((response) => {
         users.value = response.data;
     })
@@ -156,8 +159,8 @@ onMounted(() => {
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody v-if="users.length>0">
-                            <UserListItem  v-for="(user,index) in users" :key="user.id" :user="user" :index="index" @user-deleted="userDeleted" @edit-user="editUser"></UserListItem>
+                        <tbody v-if="users.data.length>0">
+                            <UserListItem  v-for="(user,index) in users.data" :key="user.id" :user="user" :index="index" @user-deleted="userDeleted" @edit-user="editUser"></UserListItem>
                         </tbody>
                         <tbody v-else>
                             <tr>
@@ -167,6 +170,7 @@ onMounted(() => {
                     </table>
                 </div>
             </div>
+            <Bootstrap4Pagination :data="users" @pagination-change-page="getUsers" />
         </div>
     </div>
 
