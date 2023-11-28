@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios';
-import { ref,  onMounted, reactive } from 'vue';
+import { ref,  onMounted, watch } from 'vue';
 import { Form, Field } from 'vee-validate';
 import * as yup from 'yup';
 import { useToastr } from '../../toastr.js';
@@ -103,6 +103,11 @@ const search = () =>{
     })
 }
 
+watch(searchQuery, () => {
+    search();
+});
+
+
 onMounted(() => {
     getUsers()
 
@@ -134,7 +139,7 @@ onMounted(() => {
                 </div>
                 <div>
                     <input type="text" v-model="searchQuery" class="form-control" placeholder="Search..." />
-                    <button @click.privent="search">Search</button>
+
                 </div>
             </div>
 
