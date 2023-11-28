@@ -4,8 +4,8 @@ import { ref,  onMounted, watch } from 'vue';
 import { Form, Field } from 'vee-validate';
 import * as yup from 'yup';
 import { useToastr } from '../../toastr.js';
-
 import UserListItem from './UserListItem.vue';
+import { debounce } from 'lodash';
 const users = ref([]);
 const editing = ref(false);
 const formValues = ref();
@@ -103,9 +103,9 @@ const search = () =>{
     })
 }
 
-watch(searchQuery, () => {
+watch(searchQuery, debounce(() => {
     search();
-});
+},300));
 
 
 onMounted(() => {
