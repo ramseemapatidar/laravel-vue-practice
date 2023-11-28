@@ -115,8 +115,8 @@ const bulkDelete = () => {
     .then(response => {
         users.value.data = users.value.data.filter(user => !selectedUsers.value.includes(user.id));
         selectedUsers.value = [];
-        //selectAll.value = false;
-        toastr.success('user deleted suceesfully');
+
+        toastr.success(response.data.message);
     });
 };
 
