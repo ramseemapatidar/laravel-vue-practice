@@ -22,6 +22,8 @@ const getUsers = (page = 1) => {
     axios.get(`/api/users?page=${page}`)
     .then((response) => {
         users.value = response.data;
+        selectedUsers.value = [];
+        selectAll.value = false;
     })
 }
 const schema = yup.object({
@@ -42,7 +44,7 @@ const editschema = yup.object({
 const createUser = (values ,{ resetForm, setErrors }) =>{
    axios.post('/api/users',values)
    .then((response) => {
-        users.value.unshift(response.data);
+        users.value.data.unshift(response.data);
         $('#userFormModal').modal('hide');
         resetForm();
         toastr.success('User created successfully!');
@@ -173,7 +175,10 @@ onMounted(() => {
         <div class="container-fluid">
             <div class="d-flex justify-content-between">
                 <div class="d-flex">
-                    <button type="button" class="btn btn-primary mb-2" @click="addUserModal">Add New User</button>
+                    <button type="button" class="btn btn-primary mb-2" @click="addUserModal">
+                        <i class="fa fa-plus-circle mr-1"></i>
+                        Add New User
+                    </button>
                     <div v-if="selectedUsers.length > 0">
                         <button @click="bulkDelete" type="button" class="ml-2 mb-2 btn btn-danger">
                             <i class="fa fa-trash mr-1"></i>
