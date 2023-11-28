@@ -22,6 +22,7 @@ const roles = ref([
 const props =  defineProps({
     user: Object,
     index: Number,
+    selectAll : Boolean,
 
 });
 

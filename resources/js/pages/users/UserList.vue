@@ -15,6 +15,7 @@ const form = ref(null);
 const toastr = useToastr();
 const searchQuery = ref(null);
 const selectedUsers = ref([]);
+const selectAll = ref(false);
 
 const getUsers = (page = 1) => {
 
@@ -115,10 +116,19 @@ const bulkDelete = () => {
     .then(response => {
         users.value.data = users.value.data.filter(user => !selectedUsers.value.includes(user.id));
         selectedUsers.value = [];
-
+        selectAll.value = false;
         toastr.success(response.data.message);
     });
 };
+
+const selectAllUsers = () => {
+    if (selectAll.value) {
+        selectedUsers.value = users.value.data.map(user => user.id);
+    } else {
+        selectedUsers.value = [];
+    }
+    console.log(selectedUsers.value);
+}
 
 const search = () =>{
     axios.get('/api/users/search',{
@@ -199,7 +209,8 @@ onMounted(() => {
                             :index="index"
                             @user-deleted="userDeleted"
                             @edit-user="editUser"
-                            @toggle-selection="toggleSelection"></UserListItem>
+                            @toggle-selection="toggleSelection"
+                            :select-all="selectAll"></UserListItem>
                         </tbody>
                         <tbody v-else>
                             <tr>
@@ -209,7 +220,9 @@ onMounted(() => {
                     </table>
                 </div>
             </div>
-            <Bootstrap4Pagination :data="users" @pagination-change-page="getUsers" />
+            <div v-if="users.data.length>0">
+                <Bootstrap4Pagination :data="users" @pagination-change-page="getUsers" />
+            </div>
         </div>
     </div>
 
