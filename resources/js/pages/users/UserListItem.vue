@@ -19,7 +19,7 @@ const roles = ref([
     }
 ]);
 
- defineProps({
+const props =  defineProps({
     user: Object,
     index: Number,
 
@@ -52,9 +52,14 @@ const changeRole = (user, role) => {
         toastr.success('Role changed successfully!');
     })
 };
+
+const toggleSelection = () =>{
+    emit('toggleSelection',props.user)
+}
 </script>
 <template>
     <tr >
+        <td><input type="checkbox" :checked="selectAll" @change="toggleSelection" /></td>
         <td>{{ index+1 }}</td>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>

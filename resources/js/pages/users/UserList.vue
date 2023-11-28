@@ -14,6 +14,7 @@ const formValues = ref();
 const form = ref(null);
 const toastr = useToastr();
 const searchQuery = ref(null);
+const selectedUsers = ref([]);
 
 const getUsers = (page = 1) => {
 
@@ -95,6 +96,30 @@ const userDeleted = (userId) => {
     users.value = users.value.filter(user => user.id !== userId);
 }
 
+const toggleSelection = (user) => {
+    const index = selectedUsers.value.indexOf(user.id);
+    if (index === -1) {
+        selectedUsers.value.push(user.id);
+    } else {
+        selectedUsers.value.splice(index, 1);
+    }
+    console.log(selectedUsers.value);
+};
+
+const bulkDelete = () => {
+    axios.delete('/api/users', {
+        data: {
+            ids: selectedUsers.value
+        }
+    })
+    .then(response => {
+        users.value.data = users.value.data.filter(user => !selectedUsers.value.includes(user.id));
+        selectedUsers.value = [];
+        //selectAll.value = false;
+        toastr.success('user deleted suceesfully');
+    });
+};
+
 const search = () =>{
     axios.get('/api/users/search',{
         params :{
@@ -139,6 +164,13 @@ onMounted(() => {
             <div class="d-flex justify-content-between">
                 <div class="d-flex">
                     <button type="button" class="btn btn-primary mb-2" @click="addUserModal">Add New User</button>
+                    <div v-if="selectedUsers.length > 0">
+                        <button @click="bulkDelete" type="button" class="ml-2 mb-2 btn btn-danger">
+                            <i class="fa fa-trash mr-1"></i>
+                            Delete Selected
+                        </button>
+                        <span class="ml-2">Selected {{ selectedUsers.length }} users</span>
+                    </div>
                 </div>
                 <div>
                     <input type="text" v-model="searchQuery" class="form-control" placeholder="Search..." />
@@ -151,7 +183,8 @@ onMounted(() => {
                     <table class="table">
                         <thead>
                             <tr>
-                                <th style="width:10px">#</th>
+                                <th><input type="checkbox" v-model="selectAll" @change="selectAllUsers" /></th>
+                                <th style="width: 10px">#</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Register Date</th>
@@ -160,7 +193,13 @@ onMounted(() => {
                             </tr>
                         </thead>
                         <tbody v-if="users.data.length>0">
-                            <UserListItem  v-for="(user,index) in users.data" :key="user.id" :user="user" :index="index" @user-deleted="userDeleted" @edit-user="editUser"></UserListItem>
+                            <UserListItem  v-for="(user,index) in users.data"
+                            :key="user.id"
+                            :user="user"
+                            :index="index"
+                            @user-deleted="userDeleted"
+                            @edit-user="editUser"
+                            @toggle-selection="toggleSelection"></UserListItem>
                         </tbody>
                         <tbody v-else>
                             <tr>
