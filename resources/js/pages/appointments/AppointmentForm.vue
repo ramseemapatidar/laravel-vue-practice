@@ -1,5 +1,22 @@
 <script setup>
-
+import axios from 'axios';
+import { reactive } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+const router = useRouter();
+const route = useRoute();
+const form = reactive({
+    title: '',
+    client_id: '',
+    start_time: '',
+    end_time: '',
+    description: '',
+});
+const handleSubmit = () => {
+    axios.post('/api/appointments/create', form)
+    .then((response) => {
+        router.push('/admin/appointments');
+    })
+};
 </script>
 <template>
     <div class="content-header">
@@ -32,20 +49,20 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <form>
+                            <form @submit.prevent="$event =>handleSubmit()">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="title">Title</label>
-                                            <input type="text" class="form-control" id="title" placeholder="Enter Title">
+                                            <input v-model="form.title" type="text" class="form-control" id="title" placeholder="Enter Title">
                                             <span class="invalid-feedback"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="client">Client Name</label>
-                                            <select id="client" class="form-control">
-                                                <option value="">select</option>
+                                            <select v-model="form.client_id"  id="client" class="form-control">
+                                                <option value="1">select</option>
                                             </select>
                                             <span class="invalid-feedback"></span>
                                         </div>
@@ -55,21 +72,21 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="start-time">Start Time</label>
-                                            <input type="text" class="form-control flatpickr"  id="start-time">
+                                            <input v-model="form.start_time" type="date" class="form-control flatpickr"  id="start-time">
                                             <span class="invalid-feedback"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="end-time">End Time</label>
-                                            <input type="text" class="form-control flatpickr" id="end-time">
+                                            <input v-model="form.end_time" type="date" class="form-control flatpickr" id="end-time">
                                             <span class="invalid-feedback"></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Description</label>
-                                    <textarea class="form-control" id="description" rows="3"
+                                    <textarea v-model="form.description" class="form-control" id="description" rows="3"
                                         placeholder="Enter Description"></textarea>
                                     <span class="invalid-feedback"></span>
                                 </div>

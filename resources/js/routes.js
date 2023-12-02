@@ -20,8 +20,8 @@ export default [
         component: ListAppointments,
     },
     {
-        path: '/admin/appointments',
-        name: 'admin.appointments',
+        path: '/admin/appointments/create',
+        name: 'admin.appointments.create',
         component: AppointmentForm,
     },
     {
