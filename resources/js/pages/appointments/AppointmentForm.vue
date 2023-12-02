@@ -33,8 +33,24 @@ const getClients = () => {
         clients.value = response.data;
     })
 };
-onMounted(() => {
 
+const getAppointmentInfo = ()=>{
+    axios.get(`/api/appointments/${route.params.id}/edit`)
+    .then(({data}) => {
+        form.title = data.title;
+        form.client_id = data.client_id;
+        form.start_time = data.formatted_start_time;
+        form.end_time = data.formatted_end_time;
+        form.description = data.description;
+    })
+}
+
+const editMode = ref(false);
+onMounted(() => {
+    if (route.name === 'admin.appointments.edit') {
+        editMode.value = true;
+        getAppointmentInfo();
+    }
     flatpickr(".flatpickr", {
         enableTime: true,
         dateFormat: "Y-m-d h:i K",
@@ -49,7 +65,9 @@ onMounted(() => {
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">
-                        Create Appointment</h1>
+                        <span v-if="editMode">Edit</span>
+                        <span v-else>Create</span>
+                        Appointment</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -60,7 +78,8 @@ onMounted(() => {
                             <router-link to="/admin/appointments">Appointments</router-link>
                         </li>
                         <li class="breadcrumb-item active">
-                            Create
+                            <span v-if="editMode">Edit</span>
+                            <span v-else>Create</span>
                         </li>
                     </ol>
                 </div>
