@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AppointmentController;
-
+use App\Http\Controllers\Admin\ClientController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,6 +38,8 @@ Route::put('/api/appointments/{appointment}/edit', [AppointmentController::class
 Route::delete('/api/appointments/{appointment}', [AppointmentController::class, 'destroy']);
 Route::get('/api/appointment-status', [AppointmentController::class, 'getStatusWithCount']);
 
+//Clients module
+Route::get('/api/clients', [ClientController::class, 'index']);
 
 Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
 
