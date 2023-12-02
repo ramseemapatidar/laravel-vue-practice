@@ -2,13 +2,20 @@
 //import axios from 'axios';
 import { ref, onMounted } from 'vue';
 const appointments = ref([]);
-
-const getAppointments = () =>{
-    axios('/api/appointments')
+const getAppointmentStatus = {'secheduled' : 1, 'confirmed' : 2, 'cancelled':3 };
+const getAppointments = (status) =>{
+    const params = {};
+    if (status) {
+        params.status = status;
+    }
+    axios.get('/api/appointments', {
+        params: params,
+    })
     .then((response)=>{
         appointments.value = response.data;
     });
 };
+
 onMounted(() => {
     getAppointments();
 
@@ -44,15 +51,22 @@ onMounted(() => {
                             </router-link>
                         </div>
                         <div class="btn-group">
-                            <button  type="button" class="btn">
+                            <button  type="button" class="btn btn-secondary">
                                 <span class="mr-1">All</span>
-                                <span class="badge badge-pill badge-info"></span>
+                                <span class="badge badge-pill badge-info">1</span>
                             </button>
 
-                            <button type="button"
-                                class="btn" >
-                                <span class="mr-1">-</span>
-                                <span class="badge badge-pill">-</span>
+                            <button @click="getAppointments(getAppointmentStatus.secheduled)" type="button" class="btn btn-default" >
+                                <span class="mr-1">Secheduled</span>
+                                <span class="badge badge-pill  badge-primary">2</span>
+                            </button>
+                            <button @click="getAppointments(getAppointmentStatus.confirmed)" type="button" class="btn btn-default" >
+                                <span class="mr-1">Confirmed</span>
+                                <span class="badge badge-pill  badge-primary">2</span>
+                            </button>
+                            <button @click="getAppointments(getAppointmentStatus.cancelled)" type="button" class="btn btn-default">
+                                <span class="mr-1">Cancelled</span>
+                                <span class="badge badge-pill  badge-danger">3</span>
                             </button>
                         </div>
                     </div>
