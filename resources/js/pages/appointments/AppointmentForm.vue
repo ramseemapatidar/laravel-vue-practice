@@ -17,10 +17,28 @@ const form = reactive({
     description: '',
 });
 const handleSubmit = (values, actions) => {
+    if (editMode.value) {
+        updateAppointment(values, actions);
+    } else {
+        createAppointment(values, actions);
+    }
+};
+
+const createAppointment = (values, actions) => {
     axios.post('/api/appointments/create', form)
     .then((response) => {
         router.push('/admin/appointments');
         toastr.success('Appointment created successfully!');
+    })
+    .catch((error) => {
+        actions.setErrors(error.response.data.errors);
+    })
+};
+const updateAppointment = (values, actions) => {
+    axios.put(`/api/appointments/${route.params.id}/edit`, form)
+    .then((response) => {
+        router.push('/admin/appointments');
+        toastr.success('Appointment updated successfully!');
     })
     .catch((error) => {
         actions.setErrors(error.response.data.errors);
@@ -44,6 +62,7 @@ const getAppointmentInfo = ()=>{
         form.description = data.description;
     })
 }
+
 
 const editMode = ref(false);
 onMounted(() => {
