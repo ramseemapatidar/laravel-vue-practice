@@ -1,4 +1,17 @@
 <script setup>
+import { reactive } from 'vue';
+const form = reactive({
+    email: '',
+    password: '',
+});
+const handleSubmit = () => {
+
+    axios.post('/login',form)
+        .then(() => {
+            window.location.href ='/admin/dashboard';
+        });
+
+};
 </script>
 <template>
     <div class="login-box">
@@ -9,9 +22,9 @@
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-                <form action="#" method="post">
+                <form @submit.prevent="handleSubmit">
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email">
+                        <input v-model="form.email" type="email" class="form-control" placeholder="Email">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -19,7 +32,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input v-model="form.password" type="password" class="form-control" placeholder="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
