@@ -19,7 +19,11 @@ const selectAll = ref(false);
 
 const getUsers = (page = 1) => {
 
-    axios.get(`/api/users?page=${page}`)
+    axios.get(`/api/users?page=${page}`, {
+        params: {
+            query: searchQuery.value
+        }
+    })
     .then((response) => {
         users.value = response.data;
         selectedUsers.value = [];
@@ -142,19 +146,9 @@ const selectAllUsers = () => {
     console.log(selectedUsers.value);
 }
 
-const search = () =>{
-    axios.get('/api/users/search',{
-        params :{
-            query : searchQuery.value
-        }
-    })
-    .then(response=>{
-        users.value = response.data;
-    })
-}
 
 watch(searchQuery, debounce(() => {
-    search();
+    getUsers();
 },300));
 
 
@@ -217,7 +211,7 @@ onMounted(() => {
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody v-if="users.data.length>0">
+                        <tbody v-if="users.data.length > 0">
                             <UserListItem  v-for="(user,index) in users.data"
                             :key="user.id"
                             :user="user"
@@ -235,9 +229,9 @@ onMounted(() => {
                     </table>
                 </div>
             </div>
-            <div v-if="users.data.length>0">
+            <!-- <div v-if="users.data.length>0"> -->
                 <Bootstrap4Pagination :data="users" @pagination-change-page="getUsers" />
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 

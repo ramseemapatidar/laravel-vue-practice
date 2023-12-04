@@ -11,7 +11,12 @@ class UserController extends Controller
 {
     public function index(Request $request){
 
-        $users = User::latest()->paginate(5);
+        $users = User::query()
+            ->when(request('query'), function ($query, $searchQuery) {
+                $query->where('name', 'like', "%{$searchQuery}%");
+            })
+            ->latest()
+            ->paginate();
 
         return $users;
     }
@@ -63,13 +68,7 @@ class UserController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function search(){
-        $searchQuery = request('query');
 
-        $users = User::where('name','like',"%{$searchQuery}%")->get();
-
-        return response()->json($users);
-    }
 
     public function bulkDelete()
     {

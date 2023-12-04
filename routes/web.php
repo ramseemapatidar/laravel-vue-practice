@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 //User module
 Route::get('/api/users', [UserController::class, 'index']);
-Route::get('/api/users/search', [UserController::class, 'search']);
+
 
 Route::post('/api/users', [UserController::class, 'store']);
 Route::put('/api/users/{user}', [UserController::class, 'update']);
