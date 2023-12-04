@@ -1,14 +1,18 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 const form = reactive({
     email: '',
     password: '',
 });
+const errorMessage = ref('');
 const handleSubmit = () => {
 
     axios.post('/login',form)
         .then(() => {
             window.location.href ='/admin/dashboard';
+        })
+        .catch((error) => {
+            errorMessage.value = error.response.data.message;
         });
 
 };
@@ -22,6 +26,9 @@ const handleSubmit = () => {
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
+                <div v-if="errorMessage" class="alert alert-danger" role="alert">
+                    {{ errorMessage }}
+                </div>
                 <form @submit.prevent="handleSubmit">
                     <div class="input-group mb-3">
                         <input v-model="form.email" type="email" class="form-control" placeholder="Email">
