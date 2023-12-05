@@ -1,3 +1,24 @@
+<script setup>
+import { onMounted, ref } from 'vue';
+
+const selectedAppointmentStatus = ref('all');
+const totalAppointmentsCount = ref(0);
+
+const getAppointmentsCount = () => {
+    axios.get('/api/stats/appointments', {
+        params: {
+            status: selectedAppointmentStatus.value,
+        }
+    })
+    .then((response) => {
+        totalAppointmentsCount.value = response.data.totalAppointmentsCount;
+    })
+};
+onMounted(() => {
+    getAppointmentsCount();
+
+});
+</script>
 <template>
     <div class="content-header">
         <div class="container-fluid">
@@ -23,12 +44,12 @@
                     <div class="small-box bg-info">
                         <div class="inner">
                             <div class="d-flex justify-content-between">
-                                <h3>1</h3>
-                                <select
-                                    style="height: 2rem; outline: 2px solid transparent;" class="px-1 rounded border-0">
-                                    <option value="">All</option>
+                                <h3>{{ totalAppointmentsCount }}</h3>
+                                <select v-model="selectedAppointmentStatus" @change="getAppointmentsCount()" style="height: 2rem; outline: 2px solid transparent;" class="px-1 rounded border-0">
+                                    <option value="all">All</option>
                                     <option value="scheduled">Scheduled</option>
-                                    <option value="closed">Closed</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="cancelled">Cancelled</option>
                                 </select>
                             </div>
                             <p>Appointments</p>
@@ -36,10 +57,10 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
+                        <router-link to="/admin/appointments" class="small-box-footer">
                             View Appointments
                             <i class="fas fa-arrow-circle-right"></i>
-                        </a>
+                        </router-link>
                     </div>
                 </div>
 

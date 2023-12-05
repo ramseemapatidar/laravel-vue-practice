@@ -5,6 +5,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\DashboardStatController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +22,9 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
+    //Dashboard module
+    Route::get('/api/stats/appointments', [DashboardStatController::class, 'appointments']);
+    Route::get('/api/stats/users', [DashboardStatController::class, 'users']);
     //User module
     Route::get('/api/users', [UserController::class, 'index']);
 
