@@ -13,7 +13,7 @@ class SettingController extends Controller
         $settings = Setting::pluck('value', 'key')->toArray();
 
         if (! $settings) {
-            return config('settings.default');
+            return config('constants.defualt_setting');
         }
 
         return $settings;

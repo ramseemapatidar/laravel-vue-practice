@@ -10,7 +10,8 @@ function setting($key)
     });
 
     if (! $settings) {
-        $settings = config('settings.default');
+        $settings = config('constants.defualt_setting');
+
     }
 
     return $settings[$key] ?? false;
