@@ -4,15 +4,19 @@ const form = reactive({
     email: '',
     password: '',
 });
+const loading = ref(false);
 const errorMessage = ref('');
 const handleSubmit = () => {
-
+    loading.value = true;
     axios.post('/login',form)
         .then(() => {
             window.location.href ='/admin/dashboard';
         })
         .catch((error) => {
             errorMessage.value = error.response.data.message;
+        })
+        .finally(() => {
+            loading.value = false;
         });
 
 };
@@ -57,7 +61,12 @@ const handleSubmit = () => {
                         </div>
 
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                            <button type="submit" class="btn btn-primary btn-block" :disabled="loading">
+                                <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <span v-else>Sign In</span>
+                            </button>
                         </div>
 
                     </div>
