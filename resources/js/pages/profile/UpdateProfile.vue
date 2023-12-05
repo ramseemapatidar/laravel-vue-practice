@@ -1,7 +1,8 @@
 <script setup>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
-
+import { useToastr } from '@/toastr';
+const toastr = useToastr();
 const form = ref({
     name : '',
     email : '',
@@ -15,6 +16,18 @@ const getUser = () => {
     });
 };
 
+const errors = ref([]);
+const updateProfile = () => {
+    axios.put('/api/profile', form.value)
+    .then((response) => {
+        toastr.success('Profile updated successfully!');
+    })
+    .catch((error) => {
+        if (error.response && error.response.status === 422) {
+            errors.value = error.response.data.errors;
+        }
+    });
+};
 
 onMounted(() => {
     getUser();
@@ -68,17 +81,19 @@ onMounted(() => {
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="profile">
-                                    <form class="form-horizontal">
+                                    <form @submit.prevent="updateProfile()" class="form-horizontal">
                                         <div class="form-group row">
                                             <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                                             <div class="col-sm-10">
                                                 <input v-model="form.name" type="text" class="form-control" id="inputName" placeholder="Name">
+                                                <span class="text-danger text-sm" v-if="errors && errors.name">{{ errors.name[0] }}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                                             <div class="col-sm-10">
                                                 <input v-model="form.email" type="email" class="form-control " id="inputEmail" placeholder="Email">
+                                                <span class="text-danger text-sm" v-if="errors && errors.email">{{ errors.email[0] }}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
