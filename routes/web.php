@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\DashboardStatController;
+use App\Http\Controllers\Admin\SettingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -45,6 +46,10 @@ Route::middleware('auth')->group(function () {
 
     //Clients module
     Route::get('/api/clients', [ClientController::class, 'index']);
+
+    //Setting module
+    Route::get('/api/settings', [SettingController::class, 'index']);
+    Route::post('/api/settings', [SettingController::class, 'update']);
 
 });
 
