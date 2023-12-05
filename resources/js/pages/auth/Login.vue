@@ -8,6 +8,7 @@ const loading = ref(false);
 const errorMessage = ref('');
 const handleSubmit = () => {
     loading.value = true;
+    errorMessage.value = '';
     axios.post('/login',form)
         .then(() => {
             window.location.href ='/admin/dashboard';
