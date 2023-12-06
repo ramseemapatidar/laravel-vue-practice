@@ -7,6 +7,7 @@ const form = ref({
     name : '',
     email : '',
     role : '',
+    avatar : '',
 
 });
 const getUser = () => {
@@ -39,10 +40,17 @@ const handleFileChange = (event) =>{
     const file = event.target.files[0];
     profileImgUrl.value = URL.createObjectURL(file);
     console.log(profileImgUrl.value);
+    const formData = new FormData();
+    formData.append('profile_picture',file);
+    axios.post('/api/upload-profile-image', formData)
+    .then((response)=>{
+        toastr.success('image ipload successfully')
+    })
 }
 
 onMounted(() => {
     getUser();
+
 });
 </script>
 <template>
@@ -51,6 +59,11 @@ onMounted(() => {
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Profile</h1>
+                    <ul>
+                        <li>php artisan make:migration add_avatar_field_to_users_table</li>
+                        <li>php artisan migrate</li>
+                        <li>php artisan storage:link</li>
+                    </ul>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -71,7 +84,7 @@ onMounted(() => {
                         <div class="card-body box-profile">
                             <div class="text-center">
                                 <input @change="handleFileChange" ref="fileInput" type="file" class="d-none">
-                                <img @click="openFileInput" class="profile-user-img img-circle" :src="profileImgUrl ? profileImgUrl : '../../../../public/noimage.png'" alt="User profile picture">
+                                <img @click="openFileInput" class="profile-user-img img-circle" :src=" profileImgUrl ? profileImgUrl : form.avatar" alt="User profile picture">
                             </div>
 
                             <h3 class="profile-username text-center">{{form.name}}</h3>

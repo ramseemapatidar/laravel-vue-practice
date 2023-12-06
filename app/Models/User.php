@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -26,6 +27,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'avatar',
     ];
 
     /**
@@ -66,5 +68,13 @@ class User extends Authenticatable
 
         // If no constant found, use the default behavior
         return parent::getAttribute($key);
+    }
+
+    public function avatar(): Attribute
+    {
+        return Attribute::make(
+            //get: fn ($value) => asset(Storage::url($value) ?? '../../public/noimage.png'),
+            get: fn ($value) => asset(Storage::url($value) ?? 'noimage.png'),
+        );
     }
 }
