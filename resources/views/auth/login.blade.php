@@ -10,10 +10,10 @@
 </head>
 
 <body class="hold-transition login-page">
-    <div id="app">
-        <router-vue>
-            <Login></Login>
-        </router-vue>
+    <div id="login">
+
+       <Login></Login>
+
     </div>
 </body>
 

@@ -1,5 +1,8 @@
 <script setup>
 import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 const form = reactive({
     email: '',
     password: '',
@@ -11,7 +14,8 @@ const handleSubmit = () => {
     errorMessage.value = '';
     axios.post('/login',form)
         .then(() => {
-            window.location.href ='/admin/dashboard';
+            router.push('/admin/dashboard');
+
         })
         .catch((error) => {
             errorMessage.value = error.response.data.message;
