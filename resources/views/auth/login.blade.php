@@ -12,7 +12,7 @@
 <body class="hold-transition login-page">
     <div id="login">
 
-       <Login></Login>
+       <Login />
 
     </div>
 </body>

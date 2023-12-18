@@ -6,7 +6,10 @@ import { ref, onMounted} from 'vue';
  import SidebarLeft from './components/SidebarLeft.vue';
  import SidebarRight from './components/SidebarRight.vue';
  import AppFooter from './components/AppFooter.vue';
+ import { useAuthUserStore } from './stores/AuthUserStore';
 
+ const authUserStore = useAuthUserStore();
+ authUserStore.getAuthUser();
 const settings = ref(null);
 
 const fetchSettings = () => {
@@ -23,12 +26,7 @@ const fetchAuthUser = () =>{
     });
 }
 
-const logout =() =>{
-    axios.get('/logout')
-    .then((response)=>{
-        window.location.href = '/login';
-    });
-};
+
 onMounted(() => {
     fetchSettings();
     fetchAuthUser();

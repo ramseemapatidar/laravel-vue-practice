@@ -30,6 +30,7 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::loginView(function () {
             return view('admin.layouts.app');
+
         });
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);

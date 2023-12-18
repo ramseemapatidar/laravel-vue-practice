@@ -1,25 +1,23 @@
 <script setup>
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-const router = useRouter();
-defineProps({
+ const router = useRouter();
+// defineProps({
 
-    user:Object,
-    settings:Object
-})
-// const logout = () => {
-//     axios.post('/logout')
-//     .then((response) => {
-//         authUserStore.user.name = '';
-//         router.push('/login');
-//     });
-// };
-const logout =() =>{
-    axios.get('/logout')
-    .then((response)=>{
-        window.location.href = '/login';
+//     user:Object,
+//     settings:Object
+// })
+const logout = () => {
+    axios.post('/logout')
+    .then((response) => {
+        authUserStore.user.name = '';
+        router.push('/login');
     });
 };
+
+import { useAuthUserStore } from '../stores/AuthUserStore';
+const authUserStore = useAuthUserStore();
+
 </script>
 <template>
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -34,11 +32,11 @@ const logout =() =>{
 
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img :src="user?.avatar"
+                    <img :src="authUserStore.user.avatar"
                         class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">{{user?.name}}</a>
+                    <a href="#" class="d-block">{{authUserStore.user.name}}</a>
                 </div>
             </div>
             <nav class="mt-2">
