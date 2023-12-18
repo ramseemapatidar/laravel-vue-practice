@@ -14,6 +14,9 @@ import Routes from './routes.js';
 import Login from './pages/auth/Login.vue';
 import App from './App.vue';
 
+import { useAuthUserStore } from './stores/AuthUserStore';
+import { useSettingStore } from './stores/SettingStore';
+
 const pinia = createPinia();
 const app = createApp(App);
 
@@ -21,6 +24,17 @@ const app = createApp(App);
 const router = createRouter({
     routes : Routes,
     history : createWebHistory()
+});
+
+router.beforeEach(async (to, from) => {
+    const authUserStore = useAuthUserStore();
+    if (authUserStore.user.name === '' && to.name !== 'admin.login') {
+        const settingStore = useSettingStore();
+        await Promise.all([
+            authUserStore.getAuthUser(),
+            settingStore.getSetting(),
+        ]);
+    }
 });
 
 app.use(pinia);

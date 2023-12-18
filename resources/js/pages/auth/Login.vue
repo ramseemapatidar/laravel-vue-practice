@@ -1,6 +1,9 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthUserStore } from '../../stores/AuthUserStore';
+
+const authUserStore = useAuthUserStore();
 
 const router = useRouter()
 const form = reactive({

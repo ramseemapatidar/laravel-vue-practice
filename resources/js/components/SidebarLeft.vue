@@ -1,12 +1,13 @@
 <script setup>
 import axios from 'axios';
+import { useAuthUserStore } from '../stores/AuthUserStore';
 import { useRouter } from 'vue-router';
- const router = useRouter();
-// defineProps({
+import { useSettingStore } from '../stores/SettingStore';
 
-//     user:Object,
-//     settings:Object
-// })
+const authUserStore = useAuthUserStore();
+const router = useRouter();
+const settingStore = useSettingStore();
+
 const logout = () => {
     axios.post('/logout')
     .then((response) => {
@@ -15,9 +16,6 @@ const logout = () => {
     });
 };
 
-import { useAuthUserStore } from '../stores/AuthUserStore';
-const authUserStore = useAuthUserStore();
-
 </script>
 <template>
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -25,7 +23,7 @@ const authUserStore = useAuthUserStore();
         <a href="index3.html" class="brand-link">
             <img src="https://adminlte.io/themes/v3/dist/img/AdminLTELogo.png" alt="AdminLTE Logo"
                 class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">{{settings?.app_name}}</span>
+            <span class="brand-text font-weight-light">{{settingStore.setting.app_name}}</span>
         </a>
 
         <div class="sidebar">
