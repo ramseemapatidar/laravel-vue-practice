@@ -1,6 +1,6 @@
 <script setup>
-import axios from 'axios';
-import { ref, onMounted} from 'vue';
+
+import { computed } from 'vue';
 
  import AppNavbar from './components/AppNavbar.vue';
  import SidebarLeft from './components/SidebarLeft.vue';
@@ -12,10 +12,13 @@ import { useSettingStore } from './stores/SettingStore';
 const authUserStore = useAuthUserStore();
 const settingStore = useSettingStore();
 
+const currentThemeMode = computed(() => {
+    return settingStore.theme === 'dark' ? 'dark-mode' : '';
+});
 
 </script>
 <template>
-    <div v-if="authUserStore.user.name !== ''" class="wrapper" id="app">
+    <div v-if="authUserStore.user.name !== ''" :class="currentThemeMode" class="wrapper" id="app">
         <AppNavbar />
         <SidebarLeft/>
         <div class="content-wrapper">
@@ -24,7 +27,8 @@ const settingStore = useSettingStore();
         <SidebarRight/>
         <AppFooter/>
     </div>
-    <div v-else class="login-page">
+    <div v-else class="login-page" :class="currentThemeMode">
         <router-view></router-view>
     </div>
+
 </template>

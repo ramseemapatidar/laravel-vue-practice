@@ -1,5 +1,10 @@
+<script setup>
+import { useSettingStore } from '../stores/SettingStore';
+
+const settingStore = useSettingStore();
+</script>
 <template>
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <nav class="main-header navbar navbar-expand" :class="settingStore.theme === 'dark' ? 'navbar-dark': 'navbar-light'">
 
         <ul class="navbar-nav">
             <li class="nav-item" id="toggleMenuIcon">
@@ -7,10 +12,10 @@
                         class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="index3.html" class="nav-link">Home</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="#" class="nav-link">Contact</a>
+                <a @click.prevent="settingStore.changeTheme" href="#" class="nav-link">
+                    <i class="far" :class="settingStore.theme === 'dark' ? 'fa-moon' : 'fa-sun'"></i>
+                    use npm i @vueuse/core
+                </a>
             </li>
         </ul>
 
